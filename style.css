@@ -15,6 +15,88 @@
     --radius: 16px;
   }
 
+/* 1. VARIABEL WARNA UNTUK DARK MODE */
+/* Warna ini akan aktif jika tag <body> memiliki class="dark-mode" */
+body.dark-mode {
+  --green-deep: #0D1A06;   /* Hijau super gelap untuk Hero */
+  --green-mid: #162B0A;    /* Variasi hijau gelap */
+  --green-pale: #1C3012;   /* Hijau pudar gelap (untuk background aktif) */
+  --cream: #12120F;        /* Background utama (pengganti krem) */
+  --ink: #E0E0D5;          /* Warna teks utama (hampir putih) */
+  --muted: #A0A090;        /* Warna teks sekunder/hint */
+  --border: #33332D;       /* Warna garis pembatas */
+  
+  /* Tambahan variabel custom agar lebih rapi */
+  --card-bg: #1A1A16;      /* Warna background kartu */
+  --input-bg: #23231E;     /* Warna background tombol/chip */
+}
+
+/* 2. PENERAPAN KE ELEMEN */
+
+/* Background Utama */
+body.dark-mode {
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+/* Kartu & Box */
+body.dark-mode .card, 
+body.dark-mode .portion-card {
+  background-color: var(--card-bg);
+  border-color: var(--border);
+}
+
+/* Tombol Chip & Input */
+body.dark-mode .chip {
+  background-color: var(--input-bg);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+/* Hasil Kalkulasi (Tile) */
+/* Kita buat transparan sedikit agar warna aslinya tetap ada tapi masuk ke tema gelap */
+body.dark-mode .result-tile.money { background: rgba(200, 232, 154, 0.1); }
+body.dark-mode .result-tile.water { background: rgba(100, 180, 255, 0.08); }
+body.dark-mode .result-tile.co2   { background: rgba(255, 180, 80, 0.08); }
+body.dark-mode .result-tile.waste { background: rgba(255, 255, 255, 0.05); }
+
+/* Teks angka di dalam tile hasil agar tetap kontras */
+body.dark-mode .tile-num {
+  color: #fff !important;
+}
+
+/* Verdict/Pesan Hasil */
+body.dark-mode .verdict.good { background: #131F0E; }
+body.dark-mode .verdict.warn { background: #22190E; }
+body.dark-mode .verdict.danger { background: #251212; }
+
+/* Share Card Overlay */
+body.dark-mode .overlay-inner {
+  background-color: var(--card-bg);
+  color: var(--ink);
+}
+
+/* Tombol Dark Mode Toggle (Floating Button) */
+.dark-mode-toggle {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: var(--green-deep);
+  color: #fff;
+  border: 2px solid var(--green-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+
   body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
 
   .hero {
