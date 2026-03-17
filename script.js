@@ -123,3 +123,29 @@
   });
 
   calc();
+function toggleDarkMode() {
+    const body = document.body;
+    const btn = document.getElementById('darkToggle');
+    
+    body.classList.toggle('dark-mode');
+    
+    // Ganti icon tombol
+    if (body.classList.contains('dark-mode')) {
+        btn.innerHTML = '☀️';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        btn.innerHTML = '🌙';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Cek settingan terakhir user pas web dibuka
+window.addEventListener('load', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkToggle').innerHTML = '☀️';
+    }
+    // Panggil calc() lo biar angkanya lgsg muncul
+    calc(); 
+});
