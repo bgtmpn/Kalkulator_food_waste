@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Food Waste Mahasiswa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<button class="dark-mode-toggle" id="darkToggle" onclick="toggleDarkMode()">
+  🌙
+</button>
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Edukasi Digital · Food Waste</span>
+    <h1>Berapa banyak yang<br><em>kamu buang</em> tanpa sadar?</h1>
+    <p>Hitung dampak nyata kebiasaan food waste-mu — dari dompet hingga bumi.</p>
+  </div>
+</div>
+
+<div class="main">
+  <p class="section-label">Kebiasaanmu</p>
+
+  <div class="card">
+    <span class="input-label">Seberapa sering kamu buang sisa makanan?</span>
+    <div class="chip-group" id="freq-group">
+      <button class="chip active" data-val="1">1x seminggu</button>
+      <button class="chip" data-val="2">2–3x seminggu</button>
+      <button class="chip" data-val="5">4–5x seminggu</button>
+      <button class="chip" data-val="7">Hampir tiap hari</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="input-label">Kira-kira berapa banyak yang tersisa di piringmu?</span>
+    <span class="input-hint">Pilih yang paling mendekati kebiasaanmu</span>
+    <div class="portion-grid" id="portion-group">
+      <div class="portion-card active" data-gram="50">
+        <div class="plate-visual">
+          <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="36" cy="44" rx="30" ry="8" fill="#D8D4C8"/>
+            <ellipse cx="36" cy="38" rx="30" ry="26" fill="#F5F2EA" stroke="#C8C4B8" stroke-width="1"/>
+            <ellipse cx="30" cy="34" rx="8" ry="5" fill="#7CB542"/>
+            <ellipse cx="40" cy="38" rx="6" ry="4" fill="#E8A020"/>
+          </svg>
+        </div>
+        <div class="portion-name">Sedikit sekali</div>
+        <div class="portion-desc">Tinggal beberapa suap kecil</div>
+        <span class="portion-gram">~50 gram</span>
+      </div>
+      <div class="portion-card" data-gram="150">
+        <div class="plate-visual">
+          <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="36" cy="44" rx="30" ry="8" fill="#D8D4C8"/>
+            <ellipse cx="36" cy="38" rx="30" ry="26" fill="#F5F2EA" stroke="#C8C4B8" stroke-width="1"/>
+            <ellipse cx="28" cy="33" rx="13" ry="9" fill="#7CB542"/>
+            <ellipse cx="42" cy="38" rx="10" ry="7" fill="#E8A020"/>
+            <ellipse cx="30" cy="42" rx="8" ry="5" fill="#D04040"/>
+          </svg>
+        </div>
+        <div class="portion-name">Seperempat piring</div>
+        <div class="portion-desc">Sekitar 1/4 porsi tersisa</div>
+        <span class="portion-gram">~150 gram</span>
+      </div>
+      <div class="portion-card" data-gram="300">
+        <div class="plate-visual">
+          <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="36" cy="44" rx="30" ry="8" fill="#D8D4C8"/>
+            <ellipse cx="36" cy="38" rx="30" ry="26" fill="#F5F2EA" stroke="#C8C4B8" stroke-width="1"/>
+            <ellipse cx="26" cy="32" rx="16" ry="11" fill="#7CB542"/>
+            <ellipse cx="44" cy="36" rx="14" ry="10" fill="#E8A020"/>
+            <ellipse cx="28" cy="43" rx="11" ry="7" fill="#D04040"/>
+            <line x1="36" y1="14" x2="36" y2="62" stroke="#C94040" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="portion-name">Setengah piring</div>
+        <div class="portion-desc">Separuh porsi tidak dimakan</div>
+        <span class="portion-gram">~300 gram</span>
+      </div>
+      <div class="portion-card" data-gram="450">
+        <div class="plate-visual">
+          <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="36" cy="44" rx="30" ry="8" fill="#D8D4C8"/>
+            <ellipse cx="36" cy="38" rx="30" ry="26" fill="#F5F2EA" stroke="#C8C4B8" stroke-width="1"/>
+            <ellipse cx="28" cy="30" rx="18" ry="13" fill="#7CB542"/>
+            <ellipse cx="46" cy="34" rx="15" ry="11" fill="#E8A020"/>
+            <ellipse cx="26" cy="44" rx="13" ry="8" fill="#D04040"/>
+            <ellipse cx="46" cy="44" rx="12" ry="8" fill="#7CB542"/>
+          </svg>
+        </div>
+        <div class="portion-name">Hampir semua</div>
+        <div class="portion-desc">Hampir seluruh porsi terbuang</div>
+        <span class="portion-gram">~450 gram</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="input-label">Rata-rata harga makanan yang kamu beli?</span>
+    <div class="slider-wrap">
+      <div class="slider-top">
+        <span class="slider-display" id="price-disp">15.000</span>
+        <span class="slider-unit">Rp / porsi</span>
+      </div>
+      <input type="range" id="price-slider" min="5000" max="60000" step="1000" value="15000">
+      <div class="slider-minmax"><span>Rp 5.000</span><span>Rp 60.000</span></div>
+    </div>
+  </div>
+
+  <p class="section-label">Dampakmu per bulan</p>
+
+  <div class="results-grid">
+    <div class="result-tile money">
+      <span class="tile-icon">💸</span>
+      <span class="tile-num" id="res-money">Rp 0</span>
+      <span class="tile-label">uang terbuang</span>
+      <span class="tile-equiv" id="eq-money"></span>
+    </div>
+    <div class="result-tile water">
+      <span class="tile-icon">💧</span>
+      <span class="tile-num" id="res-water">0 L</span>
+      <span class="tile-label">air terbuang</span>
+      <span class="tile-equiv" id="eq-water"></span>
+    </div>
+    <div class="result-tile co2">
+      <span class="tile-icon">🌫</span>
+      <span class="tile-num" id="res-co2">0 kg</span>
+      <span class="tile-label">emisi CO₂</span>
+      <span class="tile-equiv" id="eq-co2"></span>
+    </div>
+    <div class="result-tile waste">
+      <span class="tile-icon">🗑</span>
+      <span class="tile-num" id="res-waste">0 kg</span>
+      <span class="tile-label">makanan terbuang</span>
+      <span class="tile-equiv" id="eq-waste"></span>
+    </div>
+  </div>
+
+  <div class="verdict good" id="verdict">
+    <div class="verdict-icon" id="v-icon">🌱</div>
+    <div>
+      <div class="verdict-title" id="v-title">Kamu sudah cukup bijak!</div>
+      <div class="verdict-text" id="v-text">Food waste kamu tergolong rendah. Pertahankan dan ajak temanmu!</div>
+    </div>
+  </div>
+
+  <div class="annual-bar">
+    <div>
+      <div class="annual-label">Jika terus begini, dalam setahun kamu buang</div>
+      <div class="annual-num" id="res-annual">Rp 0</div>
+    </div>
+    <div class="annual-cta">Uang itu bisa buat beli buku, liburan, atau ditabung.</div>
+  </div>
+
+  <button class="share-btn" onclick="bukaShare()">Simpan hasil kalkulatormu</button>
+
+  <footer>
+    #SadarFoodWaste · #MahasiswaPeduliLingkungan
+  </footer>
+</div>
+
+<!-- ── SHARE CARD OVERLAY ── -->
+<div class="overlay" id="overlay" onclick="tutupShare(event)">
+  <div class="overlay-inner">
+    <div class="overlay-title">Kartu hasil siap dibagikan</div>
+    <div class="overlay-hint">Screenshot kartu ini lalu posting ke Instagram Stories atau Feed kamu!</div>
+
+    <div id="share-card">
+      <div class="sc-deco-circle-1"></div>
+      <div class="sc-deco-circle-2"></div>
+      <div class="sc-content">
+        <div class="sc-eyebrow">Hasil Kalkulator Food Waste</div>
+        <div class="sc-title">Setiap bulan,<br>aku tanpa sadar...</div>
+        <div class="sc-subtitle" id="sc-freq-label">membuang makanan 4x dalam sebulan</div>
+
+        <div class="sc-grid">
+          <div class="sc-tile money">
+            <span class="sc-tile-icon">💸</span>
+            <span class="sc-tile-num" id="sc-money">Rp 0</span>
+            <span class="sc-tile-label">uang terbuang</span>
+          </div>
+          <div class="sc-tile water">
+            <span class="sc-tile-icon">💧</span>
+            <span class="sc-tile-num" id="sc-water">0 L</span>
+            <span class="sc-tile-label">air terbuang</span>
+          </div>
+          <div class="sc-tile co2">
+            <span class="sc-tile-icon">🌫</span>
+            <span class="sc-tile-num" id="sc-co2">0 kg</span>
+            <span class="sc-tile-label">emisi CO₂</span>
+          </div>
+          <div class="sc-tile waste">
+            <span class="sc-tile-icon">🗑</span>
+            <span class="sc-tile-num" id="sc-waste">0 kg</span>
+            <span class="sc-tile-label">makanan terbuang</span>
+          </div>
+        </div>
+
+        <div class="sc-verdict-bar good" id="sc-verdict-bar">
+          <div class="sc-verdict-icon" id="sc-v-icon">🌱</div>
+          <div class="sc-verdict-text" id="sc-v-text"><strong>Kamu sudah cukup bijak!</strong><br>Terus pertahankan kebiasaan ini.</div>
+        </div>
+
+        <div class="sc-annual">
+          <div class="sc-annual-label">Dalam setahun, aku membuang senilai</div>
+          <div class="sc-annual-num" id="sc-annual">Rp 0</div>
+        </div>
+
+        <div class="sc-footer">
+          <div class="sc-hashtag">#SadarFoodWaste<br>#MahasiswaPeduliLingkungan</div>
+          <div class="sc-cta"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay-actions">
+      <button class="btn-dl" onclick="downloadKartu()">Simpan kartu ke galeri</button>
+      <button class="btn-close" onclick="tutupShare()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
