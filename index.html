@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WasteWise – Kalkulator Sisa Makanan</title>
+
+    <!-- Font Retro & Pixel Art -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Nunito:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Eksternal CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Library HTML2Canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <!-- LOADING SCREEN DAUR ULANG (PIXELATED) -->
+    <div id="loading-screen">
+      <div class="recycle-pixel-loader">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 2L4 7v3h3V8.5l5-3.1 5 3.1V14h3V7l-8-5zm-7 9.5L2 13l8 5 8-5-3-1.9V13l-5 3.1-5-3.1v-1.5zM17 15.5l5-3.1V20l-8 4-8-4v-3h3v1.5l5 3.1 5-3.1v-3z"
+          />
+        </svg>
+      </div>
+      <div class="loading-text">GENERATING PIXELS...</div>
+    </div>
+
+    <div class="app-container">
+      <!-- HERO SECTIONS -->
+      <header class="hero">
+        <div class="hero-inner">
+          <div class="hero-logo">
+            <span class="hero-logo-icon">🍏</span>
+          </div>
+          <h1 class="hero-wordmark-main">WASTE<span>WISE</span></h1>
+          <div class="hero-tagline">[ KALKULATOR SISA MAKANAN 8-BIT ]</div>
+        </div>
+      </header>
+
+      <!-- NAV TABS -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('input')">
+          MAIN
+        </button>
+        <button class="nav-tab" onclick="switchTab('impact')">DAMPAK</button>
+        <button class="nav-tab" onclick="switchTab('positive')">AKSI</button>
+      </nav>
+
+      <!-- MAIN APP PAGES -->
+      <main class="main">
+        <!-- PAGE 1: INPUT & ESTIMASI -->
+        <div id="page-input" class="page active">
+          <!-- STEP 01: INTENSITAS -->
+          <div class="step-label">> STEP 01: INTENSITAS</div>
+          <div class="card">
+            <h3 class="card-title">Seberapa sering kamu menyisakan makanan?</h3>
+            <div class="freq-grid" id="freq-group">
+              <button class="freq-btn active" data-val="1">
+                <span class="freq-num">1X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="2.5">
+                <span class="freq-num">2-3X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="4.5">
+                <span class="freq-num">4-5X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="7">
+                <span class="freq-num">SETIAP HARI</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 02: BESARAN PORSI -->
+          <div class="step-label">> STEP 02: BESARAN PORSI</div>
+          <div class="card">
+            <h3 class="card-title">Rata-rata porsi yang terbuang?</h3>
+            <div class="portion-grid" id="portion-group">
+              <button class="portion-btn active" data-gram="50">
+                <div class="portion-name">SEDIKIT SEKALI</div>
+                <span class="portion-gram">~50 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="150">
+                <div class="portion-name">SEPEREMPAT PIRING</div>
+                <span class="portion-gram">~150 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="300">
+                <div class="portion-name">SETENGAH PIRING</div>
+                <span class="portion-gram">~300 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="450">
+                <div class="portion-name">HAMPIR SEMUA</div>
+                <span class="portion-gram">~450 Gram</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 03: HARGA MAKANAN -->
+          <div class="step-label">> STEP 03: HARGA MAKANAN</div>
+          <div class="card">
+            <h3 class="card-title">Rata-rata harga makanan sekali beli?</h3>
+            <div class="slider-wrap">
+              <div class="slider-top">
+                <span class="slider-display" id="price-disp">15.000</span>
+                <span class="slider-unit">Rp / porsi</span>
+              </div>
+              <input
+                type="range"
+                id="price-slider"
+                min="5000"
+                max="60000"
+                step="1000"
+                value="15000"
+              />
+              <div class="slider-minmax">
+                <span>Rp 5.000</span><span>Rp 60.000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STATS HASIL BULANAN -->
+          <div class="step-label">> DAMPAK BELANJAMU</div>
+          <div class="results-wrap">
+            <h3 class="results-title">[ ESTIMASI KERUGIAN / BULAN ]</h3>
+            <div class="results-grid">
+              <div class="result-tile food">
+                <span class="tile-num" id="res-money">Rp 0</span>
+                <span class="tile-label">Uang Terbuang</span>
+                <div class="tile-equiv" id="eq-money">≈ 0x beli makan</div>
+              </div>
+              <div class="result-tile water">
+                <span class="tile-num" id="res-water">0 L</span>
+                <span class="tile-label">Air Sia-Sia</span>
+                <div class="tile-equiv" id="eq-water">≈ 0 hari mandi</div>
+              </div>
+              <div class="result-tile co2">
+                <span class="tile-num" id="res-co2">0 kg</span>
+                <span class="tile-label">Gas CO2</span>
+                <div class="tile-equiv" id="eq-co2">≈ 0 km motor</div>
+              </div>
+              <div class="result-tile meals">
+                <span class="tile-num" id="res-waste">0 kg</span>
+                <span class="tile-label">Makanan Terbuang</span>
+                <div class="tile-equiv" id="eq-waste">≈ 0 porsi makan</div>
+              </div>
+            </div>
+
+            <button class="share-btn" onclick="openShareModal()">
+              SHARE RESULT
+            </button>
+          </div>
+        </div>
+
+        <!-- PAGE 2: IMPACT -->
+        <div id="page-impact" class="page">
+          <div class="card">
+            <h3 class="card-title">Dampak Lingkungan</h3>
+            <p>
+              Sampah makanan yang membusuk menghasilkan gas metana yang merusak
+              atmosfer bumi kita!
+            </p>
+          </div>
+        </div>
+
+        <!-- PAGE 3: ACTION -->
+        <div id="page-positive" class="page">
+          <div class="card">
+            <h3 class="card-title">Aksi Nyata</h3>
+            <p>
+              Mulai dengan *Composting* mandiri di rumah atau donasikan makanan
+              berlebih sebelum basi!
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL BOX PIXEL FOR GENERATE OVERLAY CARD -->
+    <div id="share-modal" class="overlay">
+      <div class="overlay-box">
+        <h3 class="overlay-title">[ SAVE DATA ]</h3>
+
+        <!-- KARTU YANG AKAN DI-SCREENSHOT (8-BIT STYLE) -->
+        <div id="share-card">
+          <div class="sc-inner">
+            <div class="sc-top">REKAP BULANANANMU</div>
+            <div class="sc-title">WASTEWISE REPORT</div>
+            <div
+              id="sc-summary"
+              style="
+                font-size: 14px;
+                margin-bottom: 10px;
+                color: var(--green-light);
+              "
+            >
+              Loading...
+            </div>
+
+            <div class="sc-grid">
+              <div class="sc-tile food">💸 <span id="sc-money">Rp 0</span></div>
+              <div class="sc-tile water">💧 <span id="sc-water">0 L</span></div>
+              <div class="sc-tile co2">🌫 <span id="sc-co2">0 kg</span></div>
+              <div class="sc-tile meals">
+                🗑 <span id="sc-waste">0 kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay-actions">
+          <button
+            class="share-btn"
+            style="margin: 10px 0 0"
+            onclick="downloadKartu()"
+          >
+            DOWNLOAD IMG
+          </button>
+          <button
+            class="share-btn"
+            style="background: #434954"
+            onclick="closeShareModal()"
+          >
+            KEMBALI
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Eksternal JS -->
+    <script src="script.js"></script>
+  </body>
+</html>
