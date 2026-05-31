@@ -1,0 +1,1033 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green: #38b764;
+  --green-light: #a7f070;
+  --green-dark: #1a532b;
+  --orange: #ef7d1a;
+  --orange-light: #f6cd26;
+  --red: #cd2626;
+  --blue: #2bb1ff;
+  --purple: #7a30cc;
+  --cream: #f4f4e8;
+  --text: #1a1c2c;
+  --muted: #737c85;
+  --asap: #818b96;
+
+  --pixel-shadow: 4px 4px 0px #000;
+  --pixel-shadow-sm: 2px 2px 0px #000;
+  --pixel-shadow-inset: inset -4px -4px 0px rgba(0, 0, 0, 0.2);
+}
+
+body {
+  font-family: "VT323", monospace;
+  font-size: 20px;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  image-rendering: pixelated;
+}
+
+/* ════════════════════════════════
+   LOADING SCREEN — Pure CSS 3D Recycle
+════════════════════════════════ */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background: #f0f0e4;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  transition: opacity 0.6s ease;
+}
+
+.recycle-loader {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Outer glow ring — simulates 3D floor shadow */
+.recycle-loader::before {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 20px;
+  background: radial-gradient(
+    ellipse,
+    rgba(56, 183, 80, 0.35) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: shadow-pulse 2s ease-in-out infinite;
+}
+
+.recycle-svg {
+  width: 130px;
+  height: 130px;
+  animation: recycle-spin 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  filter: drop-shadow(0 8px 16px rgba(26, 83, 43, 0.4))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Smooth 3D-feel spin: slight squish mid-rotation */
+@keyframes recycle-spin {
+  0% {
+    transform: rotate(0deg) scaleX(1) scaleY(1);
+  }
+  20% {
+    transform: rotate(72deg) scaleX(0.9) scaleY(1.04);
+  }
+  40% {
+    transform: rotate(144deg) scaleX(1) scaleY(1);
+  }
+  60% {
+    transform: rotate(216deg) scaleX(0.9) scaleY(1.04);
+  }
+  80% {
+    transform: rotate(288deg) scaleX(1) scaleY(1);
+  }
+  100% {
+    transform: rotate(360deg) scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes shadow-pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(-50%) scaleX(0.7);
+    opacity: 0.4;
+  }
+}
+
+.loading-text {
+  margin-top: 28px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 12px;
+  color: var(--green-dark);
+  letter-spacing: 2px;
+  animation: blink 1s steps(2) infinite;
+}
+
+.loading-sub {
+  margin-top: 10px;
+  font-family: "VT323", monospace;
+  font-size: 19px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── CONTAINER ── */
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 800px) {
+  body {
+    padding: 20px;
+    background: #2b2d42;
+  }
+  .app-container {
+    border: 6px solid #000;
+    box-shadow: 12px 12px 0px #000;
+    background: var(--cream);
+    min-height: 90vh;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--green-dark);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 6px solid #000;
+}
+
+.hero-logo-icon {
+  font-size: 4rem;
+  display: inline-block;
+  animation: pixel-bounce 1s steps(4) infinite;
+}
+
+.hero-wordmark-main {
+  font-family: "Press Start 2P", cursive;
+  font-size: 1.8rem;
+  color: #fff;
+  text-shadow: 4px 4px 0px #000;
+  margin-top: 10px;
+}
+
+.hero-wordmark-main span {
+  color: var(--green-light);
+}
+
+.hero-tagline {
+  font-size: 18px;
+  color: #fff;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+@keyframes pixel-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ── NAVIGATION ── */
+.nav-tabs {
+  display: flex;
+  background: #000;
+  padding: 4px 4px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-tab {
+  flex: 1;
+  padding: 12px 6px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: #fff;
+  background: #434954;
+  border: 4px solid #000;
+  border-bottom: none;
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+.nav-tab.active {
+  color: #000;
+  background: var(--green-light);
+  padding-top: 16px;
+  transform: translateY(-2px);
+}
+
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+
+.main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* ── STEP LABELS ── */
+.step-label {
+  font-family: "Press Start 2P", cursive;
+  font-size: 11px;
+  color: var(--orange);
+  margin: 2rem 0 1rem;
+}
+
+/* ── CARDS ── */
+.card {
+  background: #fff;
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dark-card {
+  background: #1a1c2c;
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.card-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 11px;
+  color: var(--text);
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+/* ── FREQ GRID ── */
+.freq-grid,
+.portion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.freq-btn,
+.portion-btn {
+  background: var(--cream);
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow-sm);
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  font-family: "VT323", monospace;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.freq-btn.active,
+.portion-btn.active {
+  background: var(--green-light);
+  box-shadow: var(--pixel-shadow-inset);
+}
+
+.portion-name {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+.portion-gram {
+  display: inline-block;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  padding: 2px 8px;
+  margin-top: 4px;
+}
+
+/* ── SLIDER ── */
+.slider-wrap {
+  margin-top: 0.25rem;
+}
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.slider-display {
+  font-family: "Press Start 2P", cursive;
+  font-size: 1.5rem;
+  color: var(--green-dark);
+}
+.slider-unit {
+  font-size: 16px;
+  font-weight: bold;
+}
+input[type="range"] {
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #000;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--orange);
+  border: 4px solid #000;
+  cursor: pointer;
+}
+.slider-minmax {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+/* ── RESULTS GRID ── */
+.results-wrap {
+  background: #1a1c2c;
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 1.5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.results-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 11px;
+  color: var(--orange-light);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.result-tile {
+  border: 4px solid #000;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.result-tile.food {
+  background: var(--orange);
+}
+.result-tile.water {
+  background: var(--blue);
+}
+.result-tile.co2 {
+  background: var(--asap);
+}
+.result-tile.meals {
+  background: var(--green);
+}
+
+.tile-num {
+  font-family: "Press Start 2P", cursive;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 5px;
+  text-shadow: 2px 2px 0px #000;
+  white-space: nowrap;
+}
+
+.tile-label {
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: block;
+}
+
+.tile-equiv {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 4px;
+  font-style: italic;
+  border-top: 2px dashed rgba(0, 0, 0, 0.3);
+  padding-top: 4px;
+}
+
+/* ── PIXEL NARRATIVE ── */
+.pixel-narrative {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 4px solid #000;
+  padding: 12px;
+  margin-top: 1.25rem;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.pixel-narrative.good {
+  background: var(--green-dark);
+  color: #fff;
+}
+.pixel-narrative.warn {
+  background: var(--orange);
+  color: #fff;
+}
+.pixel-narrative.danger {
+  background: var(--red);
+  color: #fff;
+}
+
+.pn-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.pixel-narrative span:last-child {
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+/* ── VERDICT ── */
+.verdict {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  border: 4px solid #000;
+  padding: 12px;
+  margin-top: 1.5rem;
+  box-shadow: var(--pixel-shadow-sm);
+}
+
+.verdict.good {
+  background: var(--green-dark);
+  color: #fff;
+}
+.verdict.warn {
+  background: var(--orange);
+  color: #fff;
+}
+.verdict.danger {
+  background: var(--red);
+  color: #fff;
+}
+
+.verdict-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+.verdict-content {
+  flex: 1;
+}
+
+.verdict-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 11px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+  color: var(--green-light);
+}
+.verdict.warn .verdict-title {
+  color: var(--orange-light);
+}
+.verdict.danger .verdict-title {
+  color: #fff;
+  text-shadow: 2px 2px 0px #000;
+}
+.verdict-text {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+/* ── ANNUAL WRAP ── */
+.annual-wrap {
+  margin-top: 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  text-align: center;
+}
+.annual-label {
+  font-size: 16px;
+  opacity: 0.8;
+}
+.annual-val {
+  font-family: "Press Start 2P", cursive;
+  font-size: 14px;
+  color: var(--green-light);
+  display: block;
+  margin-top: 5px;
+}
+
+/* ── BUTTONS ── */
+.share-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  color: #fff;
+  font-family: "Press Start 2P", cursive;
+  font-size: 12px;
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.share-btn:hover {
+  background: var(--orange-light);
+  color: #000;
+}
+.share-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ── OVERLAY ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.overlay.show {
+  display: flex;
+}
+
+.overlay-box {
+  background: var(--cream);
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 1.5rem;
+  max-width: 420px;
+  width: 100%;
+}
+.overlay-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+/* ── SHARE CARD ── */
+#share-card {
+  background: #1a1c2c;
+  border: 4px solid #000;
+  padding: 15px;
+  color: #fff;
+  font-family: "VT323", monospace;
+}
+#share-card .sc-top {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: var(--orange);
+}
+#share-card .sc-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 16px;
+  margin: 6px 0;
+}
+.sc-summary {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: var(--green-light);
+}
+#share-card .sc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+#share-card .sc-tile {
+  border: 2px solid #000;
+  padding: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+}
+.sc-tile.food {
+  background: var(--orange);
+}
+.sc-tile.water {
+  background: var(--blue);
+}
+.sc-tile.co2 {
+  background: var(--asap);
+}
+.sc-tile.meals {
+  background: var(--green);
+}
+.sc-pos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.sc-pos-tile {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 4px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.sc-pos-label {
+  font-size: 12px;
+  opacity: 0.6;
+  color: #fff;
+}
+
+/* ── TAB 2: IMPACT ── */
+.compare-row {
+  margin-top: 0.5rem;
+}
+.compare-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.compare-label {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: var(--green-light);
+}
+.compare-pct {
+  font-family: "Press Start 2P", cursive;
+  font-size: 12px;
+  color: var(--orange-light);
+}
+.compare-track {
+  background: #2d3040;
+  border: 3px solid #000;
+  height: 20px;
+  position: relative;
+  overflow: visible;
+}
+.compare-fill {
+  height: 100%;
+  transition: width 0.5s;
+  position: relative;
+}
+.compare-fill.good {
+  background: var(--green);
+}
+.compare-fill.warn {
+  background: var(--orange);
+}
+.compare-fill.danger {
+  background: var(--red);
+}
+.compare-avg-line {
+  position: absolute;
+  right: 0;
+  top: -6px;
+  width: 3px;
+  height: calc(100% + 12px);
+  background: var(--orange-light);
+}
+.compare-caption {
+  font-size: 15px;
+  color: var(--green-light);
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+.impact-section-label {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  padding: 8px 12px;
+  border: 3px solid #000;
+  display: inline-block;
+  margin: 1.5rem 0 0.75rem;
+  box-shadow: var(--pixel-shadow-sm);
+}
+.impact-section-label.env {
+  background: var(--green);
+  color: #fff;
+}
+.impact-section-label.social {
+  background: var(--orange);
+  color: #fff;
+}
+.impact-section-label.econ {
+  background: var(--orange-light);
+  color: #000;
+}
+
+.impact-card {
+  border: 4px solid #000;
+  padding: 1rem;
+  margin-bottom: 10px;
+  box-shadow: var(--pixel-shadow-sm);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.impact-card.env {
+  background: #1e3a1a;
+  color: #fff;
+}
+.impact-card.social {
+  background: #3a1e10;
+  color: #fff;
+}
+.impact-card.econ {
+  background: #3a3010;
+  color: #fff;
+}
+.impact-card-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.impact-card-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.impact-card.env .impact-card-title {
+  color: var(--green-light);
+}
+.impact-card.social .impact-card-title {
+  color: var(--orange-light);
+}
+.impact-card.econ .impact-card-title {
+  color: var(--orange-light);
+}
+.impact-card-text {
+  font-size: 16px;
+  line-height: 1.4;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.impact-stat {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* ── TAB 3: AKSI ── */
+.action-desc {
+  font-size: 17px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+}
+.action-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.action-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 17px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+.step-num {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--green);
+  color: #fff;
+}
+.step-num.orange {
+  background: var(--orange);
+}
+.step-num.purple {
+  background: var(--purple);
+}
+.action-benefit {
+  padding: 10px 12px;
+  border: 3px solid #000;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.action-benefit.green {
+  background: rgba(56, 183, 100, 0.2);
+  color: var(--green-light);
+  border-color: var(--green);
+}
+.action-benefit.orange {
+  background: rgba(239, 125, 26, 0.2);
+  color: var(--orange-light);
+  border-color: var(--orange);
+}
+.action-benefit.purple {
+  background: rgba(122, 48, 204, 0.2);
+  color: #b48eff;
+  border-color: var(--purple);
+}
+
+/* ── CHALLENGE BOX ── */
+.challenge-box {
+  background: #1a1c2c;
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+.challenge-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: var(--orange-light);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.challenge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.challenge-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: border-color 0.1s;
+}
+.challenge-item:hover {
+  border-color: var(--green-light);
+}
+.challenge-item.done {
+  border-color: var(--green);
+  background: rgba(56, 183, 100, 0.1);
+}
+.chk-box {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: transparent;
+  font-family: "Press Start 2P", cursive;
+  transition: background 0.1s;
+}
+.chk-box.checked {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+.challenge-text {
+  flex: 1;
+  font-size: 17px;
+  line-height: 1.3;
+}
+.challenge-text strong {
+  display: block;
+  color: var(--green-light);
+}
+.challenge-text span {
+  font-size: 14px;
+  opacity: 0.7;
+}
+.challenge-progress {
+  margin-top: 1rem;
+}
+.challenge-prog-label {
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: var(--orange-light);
+  display: block;
+  margin-bottom: 6px;
+}
+.challenge-prog-track {
+  background: #2d3040;
+  border: 3px solid #000;
+  height: 16px;
+}
+.challenge-prog-fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 0.3s;
+}
+
+/* ── CONGRATS MODAL ── */
+.congrats-box {
+  text-align: center;
+  max-width: 380px;
+  animation: congrats-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes congrats-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.congrats-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: emoji-bounce 0.8s steps(4) infinite;
+}
+
+@keyframes emoji-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.congrats-title {
+  font-family: "Press Start 2P", cursive;
+  font-size: 14px;
+  color: var(--green-dark);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.congrats-text {
+  font-family: "VT323", monospace;
+  font-size: 20px;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+}
+
+.congrats-text strong {
+  color: var(--green-dark);
+}
+
+.congrats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green-dark);
+  color: var(--green-light);
+  border: 4px solid #000;
+  box-shadow: var(--pixel-shadow);
+  padding: 10px 20px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 13px;
+}
+
+.badge-icon {
+  font-size: 1.5rem;
+}
