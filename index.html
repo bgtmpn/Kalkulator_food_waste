@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WasteWise – Kalkulator Sisa Makanan</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Nunito:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <!-- ════ LOADING SCREEN ════ -->
+    <div id="loading-screen">
+      <div class="recycle-loader">
+        <svg
+          class="recycle-svg"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <radialGradient id="g1" cx="40%" cy="25%" r="70%">
+              <stop offset="0%" stop-color="#7ef542" />
+              <stop offset="50%" stop-color="#38b764" />
+              <stop offset="100%" stop-color="#1a532b" />
+            </radialGradient>
+            <radialGradient id="g2" cx="40%" cy="25%" r="70%">
+              <stop offset="0%" stop-color="#6de030" />
+              <stop offset="50%" stop-color="#2da050" />
+              <stop offset="100%" stop-color="#154525" />
+            </radialGradient>
+            <radialGradient id="g3" cx="60%" cy="25%" r="70%">
+              <stop offset="0%" stop-color="#8cf555" />
+              <stop offset="50%" stop-color="#43c070" />
+              <stop offset="100%" stop-color="#1e6030" />
+            </radialGradient>
+            <filter id="arrow-shadow">
+              <feDropShadow
+                dx="2"
+                dy="3"
+                stdDeviation="2.5"
+                flood-color="#0a2e10"
+                flood-opacity="0.45"
+              />
+            </filter>
+          </defs>
+
+          <!-- Panah 1: atas -->
+          <g
+            transform="translate(100,100) rotate(0)"
+            filter="url(#arrow-shadow)"
+          >
+            <path
+              d="M0,-72 L-14,-48 L-6,-48 L-6,-30 L6,-30 L6,-48 L14,-48 Z"
+              fill="url(#g1)"
+            />
+            <path d="M-22,-48 L0,-18 L22,-48 Z" fill="url(#g2)" />
+          </g>
+          <!-- Panah 2: kanan-bawah -->
+          <g
+            transform="translate(100,100) rotate(120)"
+            filter="url(#arrow-shadow)"
+          >
+            <path
+              d="M0,-72 L-14,-48 L-6,-48 L-6,-30 L6,-30 L6,-48 L14,-48 Z"
+              fill="url(#g1)"
+            />
+            <path d="M-22,-48 L0,-18 L22,-48 Z" fill="url(#g3)" />
+          </g>
+          <!-- Panah 3: kiri-bawah -->
+          <g
+            transform="translate(100,100) rotate(240)"
+            filter="url(#arrow-shadow)"
+          >
+            <path
+              d="M0,-72 L-14,-48 L-6,-48 L-6,-30 L6,-30 L6,-48 L14,-48 Z"
+              fill="url(#g1)"
+            />
+            <path d="M-22,-48 L0,-18 L22,-48 Z" fill="url(#g2)" />
+          </g>
+        </svg>
+      </div>
+      <div class="loading-text">LOADING...</div>
+      <div class="loading-sub">Menghitung dampak sisa makananmu...</div>
+    </div>
+
+    <div class="app-container">
+      <header class="hero">
+        <div class="hero-inner">
+          <div class="hero-logo">
+            <span class="hero-logo-icon">🍏</span>
+          </div>
+          <h1 class="hero-wordmark-main">WASTE<span>WISE</span></h1>
+          <div class="hero-tagline">[ KALKULATOR SISA MAKANAN ]</div>
+        </div>
+      </header>
+
+      <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('input')">
+          MAIN
+        </button>
+        <button class="nav-tab" onclick="switchTab('impact')">DAMPAK</button>
+        <button class="nav-tab" onclick="switchTab('positive')">AKSI</button>
+      </nav>
+
+      <main class="main">
+        <!-- ════ TAB 1: MAIN / KALKULATOR ════ -->
+        <div id="page-input" class="page active">
+          <div class="step-label">> STEP 01: INTENSITAS</div>
+          <div class="card">
+            <h3 class="card-title">Seberapa sering kamu menyisakan makanan?</h3>
+            <div class="freq-grid" id="freq-group">
+              <button class="freq-btn active" data-val="1">
+                <span class="freq-num">1X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="2.5">
+                <span class="freq-num">2-3X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="4.5">
+                <span class="freq-num">4-5X / MINGGU</span>
+              </button>
+              <button class="freq-btn" data-val="7">
+                <span class="freq-num">SETIAP HARI</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="step-label">> STEP 02: BESARAN PORSI</div>
+          <div class="card">
+            <h3 class="card-title">Rata-rata porsi yang terbuang?</h3>
+            <div class="portion-grid" id="portion-group">
+              <button class="portion-btn active" data-gram="50">
+                <div class="portion-name">SEDIKIT SEKALI</div>
+                <span class="portion-gram">~ 50 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="150">
+                <div class="portion-name">SEPEREMPAT PIRING</div>
+                <span class="portion-gram">~ 150 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="300">
+                <div class="portion-name">SETENGAH PIRING</div>
+                <span class="portion-gram">~ 300 Gram</span>
+              </button>
+              <button class="portion-btn" data-gram="450">
+                <div class="portion-name">HAMPIR SEMUA</div>
+                <span class="portion-gram">~ 450 Gram</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="step-label">> STEP 03: HARGA MAKANAN</div>
+          <div class="card">
+            <h3 class="card-title">Rata-rata harga makanan sekali beli?</h3>
+            <div class="slider-wrap">
+              <div class="slider-top">
+                <span class="slider-display" id="price-disp">15.000</span>
+                <span class="slider-unit">Rp / porsi</span>
+              </div>
+              <input
+                type="range"
+                id="price-slider"
+                min="5000"
+                max="60000"
+                step="1000"
+                value="15000"
+              />
+              <div class="slider-minmax">
+                <span>Rp 5.000</span><span>Rp 60.000</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-label">> DAMPAK BELANJAMU</div>
+          <div class="results-wrap">
+            <h3 class="results-title">[ ESTIMASI KERUGIAN / BULAN ]</h3>
+            <div class="results-grid">
+              <div class="result-tile food">
+                <span class="tile-num" id="res-money">Rp 0</span>
+                <span class="tile-label">Uang Terbuang</span>
+                <div class="tile-equiv" id="eq-money">≈ 0x beli makan</div>
+              </div>
+              <div class="result-tile water">
+                <span class="tile-num" id="res-water">0 L</span>
+                <span class="tile-label">Air Sia-Sia</span>
+                <div class="tile-equiv" id="eq-water">≈ 0 hari mandi</div>
+              </div>
+              <div class="result-tile co2">
+                <span class="tile-num" id="res-co2">0 kg</span>
+                <span class="tile-label">Gas CO2</span>
+                <div class="tile-equiv" id="eq-co2">≈ 0 km motor</div>
+              </div>
+              <div class="result-tile meals">
+                <span class="tile-num" id="res-waste">0 kg</span>
+                <span class="tile-label">Makanan Terbuang</span>
+                <div class="tile-equiv" id="eq-waste">≈ 0 porsi makan</div>
+              </div>
+            </div>
+
+            <div class="verdict good" id="verdict">
+              <div class="verdict-icon" id="v-icon">🌱</div>
+              <div class="verdict-content">
+                <div class="verdict-title" id="v-title">
+                  Kamu sudah cukup bijak!
+                </div>
+                <div class="verdict-text" id="v-text">
+                  Food waste kamu tergolong rendah. Pertahankan dan ajak temanmu
+                  untuk sadar juga!
+                </div>
+              </div>
+            </div>
+
+            <div class="annual-wrap">
+              <span class="annual-label">Estimasi Terbuang / Tahun:</span>
+              <span id="res-annual" class="annual-val">Rp 0</span>
+            </div>
+
+            <button class="share-btn" onclick="openShareModal()">
+              SHARE RESULT
+            </button>
+          </div>
+        </div>
+
+        <!-- ════ TAB 2: DAMPAK ════ -->
+        <div id="page-impact" class="page">
+          <div class="step-label">> DAMPAK PERSONALMU</div>
+          <div class="results-wrap">
+            <h3 class="results-title">[ EMISI BULANMU ]</h3>
+            <div class="results-grid">
+              <div class="result-tile co2">
+                <span class="tile-num" id="pi-co2">— kg</span>
+                <span class="tile-label">CO₂ Dihasilkan</span>
+                <div class="tile-equiv" id="pi-co2-eq">≈ — km motor</div>
+              </div>
+              <div class="result-tile meals">
+                <span class="tile-num" id="pi-meals">— porsi</span>
+                <span class="tile-label">Porsi Terbuang</span>
+                <div class="tile-equiv" id="pi-meals-eq">≈ — orang lapar</div>
+              </div>
+              <div class="result-tile water">
+                <span class="tile-num" id="pi-water">— L</span>
+                <span class="tile-label">Air Terbuang</span>
+                <div class="tile-equiv" id="pi-water-eq">≈ — botol air</div>
+              </div>
+              <div class="result-tile food">
+                <span class="tile-num" id="pi-pohon">— pohon</span>
+                <span class="tile-label">Pohon Setahun</span>
+                <div class="tile-equiv">untuk serap CO₂mu</div>
+              </div>
+            </div>
+            <div class="pixel-narrative good" id="dampak-narrative">
+              <span class="pn-icon" id="dampak-dn-icon">🌱</span>
+              <span id="dampak-narrative-text"
+                >Isi dulu kalkulator di tab MAIN!</span
+              >
+            </div>
+          </div>
+
+          <div class="step-label">> VS. RATA-RATA INDONESIA</div>
+          <div class="card dark-card">
+            <h3 class="card-title" style="color: var(--green-light)">
+              POSISIMU VS INDONESIA
+            </h3>
+            <div class="compare-row">
+              <div class="compare-label-row">
+                <span class="compare-label">WASTE-MU</span>
+                <span class="compare-pct" id="compare-pct">0%</span>
+              </div>
+              <div class="compare-track">
+                <div
+                  class="compare-fill good"
+                  id="compare-bar"
+                  style="width: 0%"
+                ></div>
+                <div class="compare-avg-line" title="Rata-rata Indonesia"></div>
+              </div>
+              <div class="compare-caption" id="compare-caption">
+                Rata-rata Indonesia ≈ 12 kg/bulan
+              </div>
+            </div>
+          </div>
+
+          <div class="step-label">> FAKTA GLOBAL</div>
+
+          <div class="impact-section-label env">🌡️ LINGKUNGAN</div>
+          <div class="impact-card env">
+            <div class="impact-card-icon">🌡️</div>
+            <div>
+              <div class="impact-card-title">Pemanasan Global</div>
+              <div class="impact-card-text">
+                Makanan membusuk di TPA menghasilkan gas metana — 25× lebih
+                berbahaya dari asap kendaraan.
+              </div>
+              <span class="impact-stat"
+                >8–10% emisi global berasal dari food waste (UNEP, 2021)</span
+              >
+            </div>
+          </div>
+          <div class="impact-card env">
+            <div class="impact-card-icon">🚿</div>
+            <div>
+              <div class="impact-card-title">Pemborosan Air Bersih</div>
+              <div class="impact-card-text">
+                Produksi 1 kg makanan butuh ~270 liter air. Kalau dibuang, semua
+                air itu sia-sia.
+              </div>
+              <span class="impact-stat"
+                >250 km³ air terbuang/tahun di dunia (FAO, 2019)</span
+              >
+            </div>
+          </div>
+          <div class="impact-card env">
+            <div class="impact-card-icon">🌲</div>
+            <div>
+              <div class="impact-card-title">Kerusakan Hutan & Tanah</div>
+              <div class="impact-card-text">
+                28% lahan pertanian dunia menghasilkan makanan yang akhirnya
+                terbuang sia-sia.
+              </div>
+              <span class="impact-stat"
+                >28% lahan pertanian → makanan yang dibuang</span
+              >
+            </div>
+          </div>
+
+          <div class="impact-section-label social">👥 SOSIAL</div>
+          <div class="impact-card social">
+            <div class="impact-card-icon">😔</div>
+            <div>
+              <div class="impact-card-title">Masih Ada yang Kelaparan</div>
+              <div class="impact-card-text">
+                733 juta orang di dunia tidur lapar setiap malam. Makanan yang
+                dibuang bisa memberi makan mereka!
+              </div>
+              <span class="impact-stat"
+                >733 juta orang kelaparan di dunia (FAO, 2023)</span
+              >
+            </div>
+          </div>
+          <div class="impact-card social">
+            <div class="impact-card-icon">🇮🇩</div>
+            <div>
+              <div class="impact-card-title">
+                Indonesia #2 Penghasil Food Waste
+              </div>
+              <div class="impact-card-text">
+                Indonesia membuang 23–48 juta ton makanan per tahun — cukup
+                memberi makan 61–125 juta orang!
+              </div>
+              <span class="impact-stat"
+                >41,6% sampah Indonesia adalah sisa makanan (KLHK, 2023)</span
+              >
+            </div>
+          </div>
+
+          <div class="impact-section-label econ">💰 EKONOMI</div>
+          <div class="impact-card econ">
+            <div class="impact-card-icon">💸</div>
+            <div>
+              <div class="impact-card-title">Kerugian Ekonomi Raksasa</div>
+              <div class="impact-card-text">
+                Di Indonesia, food waste menyebabkan kerugian Rp213–551 triliun
+                per tahun. Cukup bangun ribuan sekolah!
+              </div>
+              <span class="impact-stat"
+                >Rp213–551 triliun kerugian/tahun (Bappenas, 2021)</span
+              >
+            </div>
+          </div>
+          <div class="impact-card econ">
+            <div class="impact-card-icon">🚚</div>
+            <div>
+              <div class="impact-card-title">Biaya Pengelolaan Sampah</div>
+              <div class="impact-card-text">
+                Pemerintah buang uang untuk angkut sampah makanan. Uang itu bisa
+                untuk pendidikan dan fasilitas umum!
+              </div>
+              <span class="impact-stat"
+                >Sisa makanan = 41,6% isi TPA di Indonesia</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- ════ TAB 3: AKSI / POSITIF ════ -->
+        <div id="page-positive" class="page">
+          <div class="step-label">> POTENSI POSITIFMU</div>
+          <div class="results-wrap">
+            <h3 class="results-title">[ KALAU DIKELOLA DENGAN BAIK ]</h3>
+            <div class="results-grid">
+              <div class="result-tile meals">
+                <span class="tile-num" id="pp-compost">— kg</span>
+                <span class="tile-label">Kompos Bisa Dibuat</span>
+                <div class="tile-equiv" id="pp-compost-eq">≈ — pot tanaman</div>
+              </div>
+              <div class="result-tile food">
+                <span class="tile-num" id="pp-meals">— porsi</span>
+                <span class="tile-label">Bisa Dibagikan</span>
+                <div class="tile-equiv" id="pp-meals-eq">
+                  teman yang kenyang!
+                </div>
+              </div>
+              <div class="result-tile co2">
+                <span class="tile-num" id="pp-biogas">— Wh</span>
+                <span class="tile-label">Energi Biogas</span>
+                <div class="tile-equiv" id="pp-biogas-eq">
+                  ≈ — jam lampu LED
+                </div>
+              </div>
+              <div class="result-tile water">
+                <span class="tile-num" id="pp-co2saved">— kg</span>
+                <span class="tile-label">CO₂ Bisa Dicegah</span>
+                <div class="tile-equiv">kalau stop buang makanan</div>
+              </div>
+            </div>
+            <div class="pixel-narrative good" id="pos-narrative">
+              <span class="pn-icon">🌟</span>
+              <span id="pos-narrative-text"
+                >Isi dulu kalkulator di tab MAIN untuk lihat potensimu!</span
+              >
+            </div>
+          </div>
+
+          <div class="step-label">> CARA 1: BUAT KOMPOS</div>
+          <div class="card dark-card">
+            <h3 class="card-title" style="color: var(--green-light)">
+              ♻️ KOMPOS DARI SISA MAKANAN
+            </h3>
+            <p class="action-desc">
+              Sisa sayur, buah, dan nasi jadi pupuk alami yang menyuburkan
+              tanah. Mudah banget dilakukan di rumah!
+            </p>
+            <div class="action-steps">
+              <div class="action-step">
+                <span class="step-num">1</span
+                ><span
+                  >Kumpulkan sisa sayuran, buah, atau nasi di wadah
+                  tertutup</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num">2</span
+                ><span
+                  >Campurkan dengan tanah atau daun kering di pot/ember
+                  berlubang</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num">3</span
+                ><span>Aduk setiap 2–3 hari, tambahkan tanah jika berbau</span>
+              </div>
+              <div class="action-step">
+                <span class="step-num">4</span
+                ><span
+                  >Dalam 4–6 minggu, kompos siap dipakai untuk menanam!</span
+                >
+              </div>
+            </div>
+            <div class="action-benefit green">
+              🌻 1 kg sisa makanan →
+              <strong id="bd-compost">0,3 kg</strong> pupuk kompos yang
+              menyuburkan!
+            </div>
+          </div>
+
+          <div class="step-label">> CARA 2: DONASI MAKANAN</div>
+          <div class="card dark-card">
+            <h3 class="card-title" style="color: var(--orange-light)">
+              🤝 BERBAGI SEBELUM BUANG
+            </h3>
+            <p class="action-desc">
+              Kalau makanan masih layak, bagikan ke orang lain. Jangan langsung
+              buang!
+            </p>
+            <div class="action-steps">
+              <div class="action-step">
+                <span class="step-num orange">1</span
+                ><span
+                  >Ambil makanan secukupnya — minta tambah kalau masih
+                  lapar</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num orange">2</span
+                ><span
+                  >Kalau tidak habis, simpan di kotak makan untuk dibawa
+                  pulang</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num orange">3</span
+                ><span
+                  >Tawarkan ke teman yang masih lapar sebelum membuang</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num orange">4</span
+                ><span
+                  >Ikut program "Berbagi Makan" di sekolah atau lingkungan
+                  rumah</span
+                >
+              </div>
+            </div>
+            <div class="action-benefit orange">
+              ❤️ Potensi <strong id="bd-meals">0</strong> teman yang tidak tidur
+              lapar dari sisa makanmu!
+            </div>
+          </div>
+
+          <div class="step-label">> CARA 3: BIOGAS</div>
+          <div class="card dark-card">
+            <h3 class="card-title" style="color: #b48eff">
+              🔋 SISA MAKANAN JADI ENERGI!
+            </h3>
+            <p class="action-desc">
+              Sisa makanan bisa diurai bakteri untuk hasilkan gas metana — bahan
+              bakar memasak atau listrik. Namanya biogas!
+            </p>
+            <div class="action-steps">
+              <div class="action-step">
+                <span class="step-num purple">1</span
+                ><span
+                  >Kumpulkan sisa makanan organik (jangan campur
+                  plastik/kertas!)</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num purple">2</span
+                ><span
+                  >Masukkan ke digester biogas — alat penghasil gas dari sampah
+                  organik</span
+                >
+              </div>
+              <div class="action-step">
+                <span class="step-num purple">3</span
+                ><span>Bakteri urai sampah, hasilkan gas dalam 15–30 hari</span>
+              </div>
+              <div class="action-step">
+                <span class="step-num purple">4</span
+                ><span
+                  >Gas bisa dipakai untuk memasak, menggantikan gas LPG!</span
+                >
+              </div>
+            </div>
+            <div class="action-benefit purple">
+              ⚡ Sisa makanmu bisa hasilkan
+              <strong id="bd-biogas">0 Wh</strong> energi — cukup untuk
+              <span id="bd-biogas-eq">memasak</span>!
+            </div>
+          </div>
+
+          <div class="step-label">> TANTANGAN 7 HARI!</div>
+          <div class="challenge-box">
+            <h3 class="challenge-title">
+              🎯 [ LAKUKAN INI 7 HARI BERTURUT-TURUT ]
+            </h3>
+            <div class="challenge-list" id="challenge-list">
+              <div class="challenge-item" onclick="toggleChallenge(this)">
+                <div class="chk-box"></div>
+                <div class="challenge-text">
+                  <strong>Ambil porsi kecil dulu</strong
+                  ><span
+                    >Kalau masih lapar, baru ambil lagi. Jangan langsung ambil
+                    banyak!</span
+                  >
+                </div>
+              </div>
+              <div class="challenge-item" onclick="toggleChallenge(this)">
+                <div class="chk-box"></div>
+                <div class="challenge-text">
+                  <strong>Catat sisa makanmu setiap hari</strong
+                  ><span
+                    >Pakai WasteWise untuk melihat dampaknya dari hari ke
+                    hari</span
+                  >
+                </div>
+              </div>
+              <div class="challenge-item" onclick="toggleChallenge(this)">
+                <div class="chk-box"></div>
+                <div class="challenge-text">
+                  <strong>Pisahkan sisa makanan untuk kompos</strong
+                  ><span
+                    >Kumpulkan di wadah khusus, jangan campur dengan
+                    plastik</span
+                  >
+                </div>
+              </div>
+              <div class="challenge-item" onclick="toggleChallenge(this)">
+                <div class="chk-box"></div>
+                <div class="challenge-text">
+                  <strong>Ajak 1 teman ikut tantangan ini</strong
+                  ><span
+                    >Kalau banyak yang berubah, dampaknya jauh lebih
+                    besar!</span
+                  >
+                </div>
+              </div>
+              <div class="challenge-item" onclick="toggleChallenge(this)">
+                <div class="chk-box"></div>
+                <div class="challenge-text">
+                  <strong>Foto hasil komposmu & share ke teman</strong
+                  ><span
+                    >Tunjukkan bahwa kamu sudah jadi pahlawan lingkungan!</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="challenge-progress">
+              <span class="challenge-prog-label"
+                >PROGRESS: <span id="chk-count">0</span>/5 DONE</span
+              >
+              <div class="challenge-prog-track">
+                <div
+                  class="challenge-prog-fill"
+                  id="chk-prog"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- OVERLAY SHARE -->
+    <div id="share-modal" class="overlay">
+      <div class="overlay-box">
+        <h3 class="overlay-title">[ SAVE DATA ]</h3>
+        <div id="share-card">
+          <div class="sc-inner">
+            <div class="sc-top">REKAP BULANMU</div>
+            <div class="sc-title">WASTEWISE REPORT</div>
+            <div id="sc-summary" class="sc-summary">Loading...</div>
+            <div class="sc-grid">
+              <div class="sc-tile food">💸 <span id="sc-money">Rp 0</span></div>
+              <div class="sc-tile water">💧 <span id="sc-water">0 L</span></div>
+              <div class="sc-tile co2">🌫 <span id="sc-co2">0 kg</span></div>
+              <div class="sc-tile meals">
+                🗑 <span id="sc-waste">0 kg</span>
+              </div>
+            </div>
+            <div class="sc-pos-grid">
+              <div class="sc-pos-tile">
+                🌱 <span id="sc-compost">— kg</span
+                ><span class="sc-pos-label">kompos</span>
+              </div>
+              <div class="sc-pos-tile">
+                🍱 <span id="sc-donate">— porsi</span
+                ><span class="sc-pos-label">donasi</span>
+              </div>
+              <div class="sc-pos-tile">
+                ⚡ <span id="sc-biogas">— Wh</span
+                ><span class="sc-pos-label">biogas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="overlay-actions">
+          <button
+            class="share-btn"
+            style="margin: 10px 0 0"
+            onclick="downloadKartu()"
+          >
+            DOWNLOAD IMG
+          </button>
+          <button
+            class="share-btn"
+            style="background: #434954"
+            onclick="closeShareModal()"
+          >
+            KEMBALI
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
